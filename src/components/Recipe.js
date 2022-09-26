@@ -1,14 +1,23 @@
+import { useState } from "react";
 import styles from "./Recipe.module.scss";
-import recipeImg from "../assets/images/pavlova.jpeg"
 
-export default function Recipe() {
+export default function Recipe({title, img}) {
+
+    const [liked, setLiked] = useState(false);
+
+    function handleClickLike(e) {
+        e.preventDefault();
+        setLiked(!liked);
+    }
+
     return (
-        <div className={styles.recipe}>
+        <div onClick={handleClickLike} className={styles.recipe}>
             <div className={styles.recipeImage}>
-                <img src={recipeImg} alt="Recipe" />
+                <img src={img} alt="Recipe" />
             </div>
-            <div className={`${styles.recipeTitle} d-flex flex-row justify-content-center align-items-center`}>
-                <h3>Pavlova Express</h3>
+            <div className={`${styles.recipeTitle} d-flex flex-column justify-content-center align-items-center`}>
+                <h3 className="mb-20">{title}</h3>
+                <i className={`fa-solid fa-heart ${liked ? "text-primary" : ""} `}></i>
             </div>
         </div>
     )
