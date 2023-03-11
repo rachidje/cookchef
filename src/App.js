@@ -2,6 +2,9 @@ import Homepage from "./pages/Homepage/Homepage";
 import Header from "./components/layout/Header/Header";
 import Footer from "./components/layout/Footer/Footer";
 import styles from "./App.module.scss";
+import { seedRecipes } from "./data/seed";
+
+// seedRecipes();
 
 function App() {
   return (
