@@ -34,6 +34,14 @@ export default function Homepage() {
     return () => (cancel = true);
   }, [BASE_URL_API]);
 
+  function updateReceipe(updatedRecipe) {
+    setRecipes(
+      recipes.map((recipe) =>
+        recipe._id === updatedRecipe._id ? updatedRecipe : recipe
+      )
+    );
+  }
+
   function handleInput(e) {
     const filter = e.target.value;
     setFilter(filter.trim().toLowerCase());
@@ -64,8 +72,12 @@ export default function Homepage() {
           <div className={styles.grid}>
             {recipes
               .filter((r) => r.title.toLowerCase().startsWith(filter))
-              .map(({ title, _id, image }) => (
-                <Recipe key={_id} title={title} img={image} />
+              .map((recipe) => (
+                <Recipe
+                  key={recipe._id}
+                  recipe={recipe}
+                  toggleLikeRecipe={updateReceipe}
+                />
               ))}
           </div>
         )}

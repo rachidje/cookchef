@@ -1,18 +1,34 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ApiContext } from "../../../context/ApiContext";
 import styles from "./Recipe.module.scss";
 
-export default function Recipe({ title, img }) {
-  const [liked, setLiked] = useState(false);
+export default function Recipe({
+  recipe: { _id, title, image, liked },
+  toggleLikeRecipe,
+}) {
+  const BASE_URL_API = useContext(ApiContext);
 
-  function handleClickLike(e) {
-    e.preventDefault();
-    setLiked(!liked);
+  async function handleClickLike(e) {
+    try {
+      const response = await fetch(`${BASE_URL_API}/${_id}`, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ liked: !liked }),
+      });
+
+      if (response.ok) {
+        const updatedRecipe = await response.json();
+        toggleLikeRecipe(updatedRecipe);
+      }
+    } catch (error) {
+      console.log("Error");
+    }
   }
 
   return (
     <div onClick={handleClickLike} className={styles.recipe}>
       <div className={styles.recipeImage}>
-        <img src={img} alt="Recipe" />
+        <img src={image} alt="Recipe" />
       </div>
       <div
         className={`${styles.recipeTitle} d-flex flex-column justify-content-center align-items-center`}
