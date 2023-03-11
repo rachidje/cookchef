@@ -26,3 +26,18 @@
     max-width: 1130px;
     width: 100%;
 }
+
+.searchbar {
+    padding: 10px 15px;
+    border: 1px solid var(--gray-2);
+    border-radius: 20px;
+
+    i {
+        margin-right: 20px;
+    }
+
+    input {
+        outline: 0;
+        border: 0;
+    }
+}
