@@ -1,8 +1,9 @@
-import Recipe from "./components/Recipe";
+import Recipe from "./components/recipe/Recipe";
 import styles from "./Homepage.module.scss";
 import { useContext, useEffect, useState } from "react";
 import Loading from "../../components/Loading/Loading";
 import { ApiContext } from "../../context/ApiContext";
+import Search from "./components/search/Search";
 
 export default function Homepage() {
   const [recipes, setRecipes] = useState([]);
@@ -49,11 +50,6 @@ export default function Homepage() {
     );
   }
 
-  function handleInput(e) {
-    const filter = e.target.value;
-    setFilter(filter.trim().toLowerCase());
-  }
-
   function handleClickLoadMore() {
     setPage(page + 1);
   }
@@ -66,19 +62,7 @@ export default function Homepage() {
       <div
         className={`card flex-fill p-20 my-30 d-flex flex-column ${styles.contentCard}`}
       >
-        <div
-          className={`d-flex flex-row justify-content-center align-items-center my-30 ${styles.searchbar}`}
-        >
-          <i className="fa-solid fa-magnifying-glass"></i>
-          <input
-            onInput={handleInput}
-            className="flex-fill"
-            type="text"
-            name="search"
-            id="search"
-            placeholder="Rechercher"
-          />
-        </div>
+        <Search setFilter={setFilter} />
         {isLoading && !recipes.length ? (
           <Loading />
         ) : (

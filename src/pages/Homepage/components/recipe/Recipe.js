@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { ApiContext } from "../../../context/ApiContext";
+import { useContext } from "react";
+import { ApiContext } from "../../../../context/ApiContext";
 import styles from "./Recipe.module.scss";
 
 export default function Recipe({
@@ -8,7 +8,7 @@ export default function Recipe({
 }) {
   const BASE_URL_API = useContext(ApiContext);
 
-  async function handleClickLike(e) {
+  async function handleClickLike() {
     try {
       const response = await fetch(`${BASE_URL_API}/${_id}`, {
         method: "PATCH",
