@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import Loading from "../../components/Loading/Loading";
 import { ApiContext } from "../../context/ApiContext";
 import Search from "./components/search/Search";
-import useFetchData from "../../hooks/useFetchData";
+import { useFetchData } from "../../hooks";
 
 export default function Homepage() {
   const [filter, setFilter] = useState("");
@@ -19,6 +19,10 @@ export default function Homepage() {
         recipe._id === updatedRecipe._id ? updatedRecipe : recipe
       )
     );
+  }
+
+  function deleteRecipe(_id) {
+    setRecipes(recipes.filter((recipe) => recipe._id !== _id));
   }
 
   function handleClickLoadMore() {
@@ -45,6 +49,7 @@ export default function Homepage() {
                   key={recipe._id}
                   recipe={recipe}
                   toggleLikeRecipe={updateReceipe}
+                  deleteRecipe={deleteRecipe}
                 />
               ))}
           </div>

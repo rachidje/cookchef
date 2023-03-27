@@ -5,6 +5,7 @@ import styles from "./Recipe.module.scss";
 export default function Recipe({
   recipe: { _id, title, image, liked },
   toggleLikeRecipe,
+  deleteRecipe,
 }) {
   const BASE_URL_API = useContext(ApiContext);
 
@@ -25,8 +26,23 @@ export default function Recipe({
     }
   }
 
+  async function handleClickDelete(e) {
+    e.stopPropagation();
+    try {
+      const response = await fetch(`${BASE_URL_API}/${_id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        deleteRecipe(_id);
+      }
+    } catch (error) {
+      console.log("Error");
+    }
+  }
+
   return (
     <div onClick={handleClickLike} className={styles.recipe}>
+      <i onClick={handleClickDelete} className="fa-solid fa-xmark"></i>
       <div className={styles.recipeImage}>
         <img src={image} alt="Recipe" />
       </div>
