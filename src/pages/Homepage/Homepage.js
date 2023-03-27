@@ -1,46 +1,17 @@
 import Recipe from "./components/recipe/Recipe";
 import styles from "./Homepage.module.scss";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Loading from "../../components/Loading/Loading";
 import { ApiContext } from "../../context/ApiContext";
 import Search from "./components/search/Search";
+import useFetchData from "../../hooks/useFetchData";
 
 export default function Homepage() {
-  const [recipes, setRecipes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(1);
   const BASE_URL_API = useContext(ApiContext);
 
-  useEffect(() => {
-    let cancel = false;
-    async function fetchRecipes() {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `${BASE_URL_API}?skip=${(page - 1) * 18}&limit=18`
-        );
-        if (response.ok && !cancel) {
-          const newRecipes = await response.json();
-          setRecipes((x) =>
-            Array.isArray(newRecipes)
-              ? [...x, ...newRecipes]
-              : [...x, newRecipes]
-          );
-        }
-      } catch (error) {
-        console.log("ERROR");
-      } finally {
-        if (!cancel) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    fetchRecipes();
-
-    return () => (cancel = true);
-  }, [BASE_URL_API, page]);
+  const [[recipes, setRecipes], isLoading] = useFetchData(BASE_URL_API, page);
 
   function updateReceipe(updatedRecipe) {
     setRecipes(
