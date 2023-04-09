@@ -18,7 +18,9 @@ export function useFetchRecipes(page) {
           queryParam.append("sort", "createdAt:-1");
         }
         const fetchedRecipes = await getRecipes(queryParam);
-        setRecipes(fetchedRecipes);
+        if(!cancel) {
+          setRecipes((x) => [...x, ...fetchedRecipes]);
+        }
       } catch (error) {
         setError("Erreur lors de la recuperation des donnees");
       } finally {

@@ -10,18 +10,50 @@ export async function getRecipes(queryParam) {
     }
 }
 
-export async function getRecipe() {
-
+export async function getRecipe(_id) {
+    const response = await fetch(`${RECIPE_API_URL}/${_id}`)
+    if(response.ok) {
+        return response.json();
+    } else {
+        throw new Error("Error fetch one recipe")
+    }
 }
 
 export async function deleteRecipe(_id) {
-
+    const response = await fetch(`${RECIPE_API_URL}/${_id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        return _id;
+      } else {
+        throw new Error("Error delete recipe");
+      }
 }
 
 export async function updateRecipe(updatedRecipe) {
+    const { _id, ...restRecipe } = updatedRecipe;
+    const response = await fetch(`${RECIPE_API_URL}/${_id}`, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(restRecipe),
+    });
 
+    if (response.ok) { 
+        return response.json();
+    } else {
+        throw new Error("Error update recipe");
+    }
 }
 
 export async function createRecipe(newRecipe) {
-
+    const response = await fetch(RECIPE_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newRecipe)
+    });
+    if (response.ok) {
+        return response.json()
+    } else {
+        throw new Error("Error create recipe");
+    }
 }
