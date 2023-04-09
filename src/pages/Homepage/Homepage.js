@@ -1,10 +1,12 @@
-import Recipe from "./components/recipe/Recipe";
-import styles from "./Homepage.module.scss";
-import { useContext, useState } from "react";
-import Loading from "../../components/Loading/Loading";
 import { ApiContext } from "../../context/ApiContext";
-import Search from "./components/search/Search";
+import { useContext, useState } from "react";
 import { useFetchData } from "../../hooks";
+
+import styles from "./Homepage.module.scss";
+
+import Recipe from "./components/recipe/Recipe";
+import Loading from "../../components/Loading/Loading";
+import Search from "./components/search/Search";
 
 export default function Homepage() {
   const [filter, setFilter] = useState("");
@@ -13,16 +15,39 @@ export default function Homepage() {
 
   const [[recipes, setRecipes], isLoading] = useFetchData(BASE_URL_API, page);
 
-  function updateReceipe(updatedRecipe) {
-    setRecipes(
-      recipes.map((recipe) =>
-        recipe._id === updatedRecipe._id ? updatedRecipe : recipe
-      )
-    );
+  async function updateRecipe(updatedRecipe) {
+    try {
+      const { _id, ...restRecipe } = updatedRecipe;
+      const response = await fetch(`${BASE_URL_API}/${_id}`, {
+        method: "PATCH",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(restRecipe),
+      });
+
+      if (response.ok) { 
+        const updatedRecipe = await response.json();
+        setRecipes(
+          recipes.map((recipe) =>
+            recipe._id === updatedRecipe._id ? updatedRecipe : recipe
+          )
+        );
+      }
+    } catch (error) {
+      console.log("Error");
+    }
   }
 
-  function deleteRecipe(_id) {
-    setRecipes(recipes.filter((recipe) => recipe._id !== _id));
+  async function deleteRecipe(_id) {
+    try {
+      const response = await fetch(`${BASE_URL_API}/${_id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setRecipes(recipes.filter((recipe) => recipe._id !== _id));
+      }
+    } catch (error) {
+      console.log("Error");
+    }
   }
 
   function handleClickLoadMore() {
@@ -48,7 +73,7 @@ export default function Homepage() {
                 <Recipe
                   key={recipe._id}
                   recipe={recipe}
-                  toggleLikeRecipe={updateReceipe}
+                  updateRecipe={updateRecipe}
                   deleteRecipe={deleteRecipe}
                 />
               ))}

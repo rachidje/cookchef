@@ -1,56 +1,30 @@
-import { useContext } from "react";
-import { ApiContext } from "../../../../context/ApiContext";
 import styles from "./Recipe.module.scss";
 
-export default function Recipe({
-  recipe: { _id, title, image, liked },
-  toggleLikeRecipe,
-  deleteRecipe,
-}) {
-  const BASE_URL_API = useContext(ApiContext);
+export default function Recipe({ recipe, updateRecipe, deleteRecipe }) {
 
-  async function handleClickLike() {
-    try {
-      const response = await fetch(`${BASE_URL_API}/${_id}`, {
-        method: "PATCH",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ liked: !liked }),
-      });
-
-      if (response.ok) {
-        const updatedRecipe = await response.json();
-        toggleLikeRecipe(updatedRecipe);
-      }
-    } catch (error) {
-      console.log("Error");
-    }
+  function handleClickLike() {
+    updateRecipe({
+      ...recipe, 
+      liked: !recipe.liked
+    })
   }
 
-  async function handleClickDelete(e) {
+  function handleClickDelete(e) {
     e.stopPropagation();
-    try {
-      const response = await fetch(`${BASE_URL_API}/${_id}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        deleteRecipe(_id);
-      }
-    } catch (error) {
-      console.log("Error");
-    }
+    deleteRecipe(recipe._id);
   }
 
   return (
     <div onClick={handleClickLike} className={styles.recipe}>
       <i onClick={handleClickDelete} className="fa-solid fa-xmark"></i>
       <div className={styles.recipeImage}>
-        <img src={image} alt="Recipe" />
+        <img src={recipe.image} alt="Recipe" />
       </div>
       <div
         className={`${styles.recipeTitle} d-flex flex-column justify-content-center align-items-center`}
       >
-        <h3 className="mb-20">{title}</h3>
-        <i className={`fa-solid fa-heart ${liked ? "text-primary" : ""} `}></i>
+        <h3 className="mb-20">{recipe.title}</h3>
+        <i className={`fa-solid fa-heart ${recipe.liked ? "text-primary" : ""} `}></i>
       </div>
     </div>
   );
