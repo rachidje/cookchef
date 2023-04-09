@@ -1,6 +1,6 @@
 import { ApiContext } from "../../context/ApiContext";
 import { useContext, useState } from "react";
-import { useFetchData } from "../../hooks";
+import {useFetchRecipes } from "../../hooks";
 
 import styles from "./Homepage.module.scss";
 
@@ -13,7 +13,7 @@ export default function Homepage() {
   const [page, setPage] = useState(1);
   const BASE_URL_API = useContext(ApiContext);
 
-  const [[recipes, setRecipes], isLoading] = useFetchData(BASE_URL_API, page);
+  const [[recipes, setRecipes], isLoading] = useFetchRecipes(page);
 
   async function updateRecipe(updatedRecipe) {
     try {
