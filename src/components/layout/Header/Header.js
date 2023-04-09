@@ -19,7 +19,7 @@ export default function Header() {
           <button
             className="btn btn-primary mr-15"
           >
-            Ajouter une recette
+            Admin
           </button>
         </NavLink>
         <button className="btn btn-reverse-primary mr-15">
