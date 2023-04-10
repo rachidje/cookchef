@@ -2,13 +2,17 @@ import styles from "./AdminRecipesForm.module.scss";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createRecipe as createRecipeApi } from "../../../../../../apis";
+import { createRecipe as createRecipeApi, updateRecipe as updateRecipeApi } from "../../../../../../apis";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 export default function AdminRecipesForm() {
 
+  const recipe = useLoaderData();
+  const navigate = useNavigate();
+
   const defaultValues = {
-    title: "",
-    image: "",
+    title: recipe ? recipe.title : "",
+    image: recipe ? recipe.image : "",
   };
 
   const recipeSchema = yup.object({
@@ -35,8 +39,12 @@ export default function AdminRecipesForm() {
   async function submit(values) {
     try {
       clearErrors();
-      await createRecipeApi(values);
-      reset(defaultValues);
+      if(recipe) {
+        await updateRecipeApi({...values, _id: recipe._id});
+      } else {
+        await createRecipeApi(values);
+      }
+      navigate('/admin/recipes/list');
     } catch (error) {
       setError("generic", {
         type: "generic",
