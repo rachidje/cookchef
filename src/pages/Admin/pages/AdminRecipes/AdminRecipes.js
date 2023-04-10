@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 export default function AdminRecipes() {
     return (
-        <div className="d-flex flex-column p-20">
+        <div className="d-flex flex-fill flex-column p-20">
             <h4 className="mb-20">Gestion des recettes</h4>
             <div className="flex-fill d-flex flex-column">
                 <AdminRecipesNav />

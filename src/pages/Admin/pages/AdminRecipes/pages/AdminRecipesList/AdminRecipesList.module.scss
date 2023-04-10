@@ -1,0 +1,12 @@
+.list {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 5px;
+    border: var(--border);
+    flex: 1 1 auto;
+
+    li {
+        padding: 5px 0;
+        border-bottom: var(--border);
+    }
+}
